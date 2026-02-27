@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Nuevo Artículo // NEO-TOKYO</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@300;700&display=swap');
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #0a0f0f;
+            font-family: 'Rajdhani', sans-serif;
+            position: relative;
+            overflow-x: hidden;
+            padding: 40px 20px;
+        }
+
+        /* Fondo con líneas de código matrix */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(0deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(circle at 50% 50%, black 40%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Efecto de escaneo */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, 
+                transparent 0%, 
+                rgba(0, 255, 255, 0.02) 10%,
+                transparent 20%);
+            animation: scan 8s linear infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(200%); }
+        }
+
+        /* Contenedor principal */
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* HUD Superior */
+        .hud-top {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 30px;
+            border: 1px solid #00ffff22;
+            background: #0f1a1a99;
+            backdrop-filter: blur(5px);
+            margin-bottom: 40px;
+            font-family: 'Orbitron', monospace;
+            color: #00ffff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 14px;
+            box-shadow: 0 0 20px #00ffff33;
+            clip-path: polygon(0 0, 100% 0, 98% 100%, 2% 100%);
+        }
+
+        .hud-item {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .pulse {
+            width: 8px;
+            height: 8px;
+            background: #00ffff;
+            border-radius: 0;
+            box-shadow: 0 0 10px #00ffff;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Título con efecto glitch */
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 3rem;
+            text-align: center;
+            color: transparent;
+            -webkit-text-stroke: 2px #00ffff;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            position: relative;
+            margin: 30px 0 40px;
+            filter: drop-shadow(0 0 20px #00ffff);
+            animation: glitch 3s infinite;
+        }
+
+        h1::before,
+        h1::after {
+            content: "Nuevo Artículo";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 3rem;
+            text-align: center;
+            color: #00ffff;
+            background: #0a0f0f;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+            transform: translateX(-2px);
+            opacity: 0.8;
+            animation: glitchBefore 2s infinite linear alternate-reverse;
+        }
+
+        h1::after {
+            clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+            transform: translateX(2px);
+            animation: glitchAfter 2s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitchBefore {
+            0% { transform: translateX(-2px); opacity: 0.8; }
+            100% { transform: translateX(2px); opacity: 0.6; }
+        }
+
+        @keyframes glitchAfter {
+            0% { transform: translateX(2px); opacity: 0.8; }
+            100% { transform: translateX(-2px); opacity: 0.6; }
+        }
+
+        /* Formulario - Estilo cyberpunk */
+        .form-box {
+            background: #0c1414;
+            border: 2px solid #00ffff;
+            padding: 40px;
+            position: relative;
+            box-shadow: 
+                0 0 30px #00ffff33,
+                inset 0 0 30px #00ffff22;
+            clip-path: polygon(0% 0%, 100% 0%, 98% 100%, 2% 100%);
+            margin: 30px 0 40px;
+        }
+
+        /* Esquinas decorativas */
+        .corner {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border: 2px solid #00ffff;
+            filter: drop-shadow(0 0 10px #00ffff);
+        }
+
+        .corner-tl {
+            top: 10px;
+            left: 10px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .corner-tr {
+            top: 10px;
+            right: 10px;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .corner-bl {
+            bottom: 10px;
+            left: 10px;
+            border-right: none;
+            border-top: none;
+        }
+
+        .corner-br {
+            bottom: 10px;
+            right: 10px;
+            border-left: none;
+            border-top: none;
+        }
+
+        /* Estilos para los campos del formulario */
+        form {
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        form p {
+            margin: 20px 0;
+            color: #88aaff;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 8px;
+            color: #00ffff;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+        form input, form textarea, form select {
+            width: 100%;
+            padding: 12px 15px;
+            background: #1a2525;
+            border: 1px solid #00ffff66;
+            color: #ffffff;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            box-sizing: border-box;
+            transition: all 0.3s;
+        }
+
+        form input:focus, form textarea:focus, form select:focus {
+            outline: none;
+            border-color: #ffffff;
+            box-shadow: 0 0 20px #00ffff;
+            background: #1f2f2f;
+        }
+
+        form textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* Línea de código decorativa */
+        .code-line {
+            font-family: 'Orbitron', monospace;
+            color: #00ffff99;
+            font-size: 0.85rem;
+            margin: 20px 0;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .blink {
+            width: 8px;
+            height: 15px;
+            background: #00ffff;
+            display: inline-block;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Botón de guardar */
+        button {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: #00ffff;
+            background: transparent;
+            border: 2px solid #00ffff;
+            padding: 15px 40px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%);
+            box-shadow: 0 0 20px #00ffff33;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background: #00ffff22;
+            box-shadow: 0 0 40px #00ffff;
+            transform: scale(1.02);
+            border-color: #ffffff;
+            color: #ffffff;
+        }
+
+        button::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, #00ffff33, transparent);
+            transition: left 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        /* Botón de volver */
+        .back-button {
+            display: inline-block;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: #88aaff;
+            text-decoration: none;
+            padding: 12px 30px;
+            border: 1px solid #00ffff66;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: all 0.3s;
+            clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+            margin: 20px 0 40px;
+        }
+
+        .back-button:hover {
+            color: #00ffff;
+            border-color: #00ffff;
+            box-shadow: 0 0 30px #00ffff;
+            background: #00ffff11;
+        }
+
+        /* Elementos flotantes tecnológicos */
+        .floating-tech {
+            position: fixed;
+            color: #00ffff;
+            font-family: 'Orbitron', monospace;
+            font-size: 12px;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            letter-spacing: -5px;
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: 1;
+            animation: float 20s linear infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes float {
+            from { transform: translateY(100vh); }
+            to { transform: translateY(-100vh); }
+        }
+
+        /* Footer HUD */
+        .hud-bottom {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 25px;
+            border: 1px solid #00ffff22;
+            background: #0f1a1a99;
+            backdrop-filter: blur(5px);
+            margin-top: 30px;
+            font-family: 'Orbitron', monospace;
+            color: #00ffff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 12px;
+            box-shadow: 0 0 20px #00ffff33;
+            clip-path: polygon(0 0, 100% 0, 98% 100%, 2% 100%);
+        }
+
+        /* Mensaje de ayuda */
+        .help-text {
+            color: #88aaff99;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            border-left: 2px solid #00ffff33;
+            padding-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Elementos flotantes tecnológicos -->
+    <div class="floating-tech" style="left: 5%; animation-duration: 15s;">010101010</div>
+    <div class="floating-tech" style="left: 15%; animation-duration: 12s;">100101100</div>
+    <div class="floating-tech" style="left: 85%; animation-duration: 18s;">011001101</div>
+    <div class="floating-tech" style="left: 95%; animation-duration: 14s;">110010010</div>
+
+    <div class="container">
+        <!-- HUD Superior -->
+        <div class="hud-top">
+            <div class="hud-item">
+                <div class="pulse"></div>
+                <span>TERMINAL DE CREACIÓN</span>
+            </div>
+            <div class="hud-item">
+                <span>v.2.0.2.6</span>
+                <span>||</span>
+                <span>NEO-TOKYO</span>
+            </div>
+            <div class="hud-item">
+                <span>NUEVO REGISTRO</span>
+                <div class="pulse"></div>
+            </div>
+        </div>
+
+        <!-- Título con efecto glitch -->
+        <h1>Nuevo Artículo</h1>
+
+        <!-- Línea de código -->
+        <div class="code-line" style="justify-content: center;">
+            > INGRESANDO NUEVOS DATOS A LA BASE <span class="blink"></span>
+        </div>
+
+        <!-- Formulario principal -->
+        <div class="form-box">
+            <div class="corner corner-tl"></div>
+            <div class="corner corner-tr"></div>
+            <div class="corner corner-bl"></div>
+            <div class="corner corner-br"></div>
+
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                
+                <div class="code-line" style="margin: 30px 0 20px;">
+                    > VERIFICANDO DATOS...
+                </div>
+                
+                <button type="submit">[ GUARDAR REGISTRO ]</button>
+            </form>
+        </div>
+
+        <!-- Botón de volver -->
+        <div style="text-align: center;">
+            <a href="/" class="back-button">← VOLVER A LA LISTA</a>
+        </div>
+
+        <!-- Footer HUD -->
+        <div class="hud-bottom">
+            <div class="hud-item">CYBERSPACE // SEGURO</div>
+            <div class="hud-item">
+                ⚡ MODO: CREACIÓN ⚡
+            </div>
+            <div class="hud-item">{{ request.build_absolute_uri }}</div>
+        </div>
+    </div>
+</body>
+</html>

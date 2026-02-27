@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+
+# Entorno virtual
+venv/
+env/
+ENV/
+
+# VSCode
+.vscode/
+
+# Archivos de entorno
+.env
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Migraciones compiladas
+*/migrations/*.pyc

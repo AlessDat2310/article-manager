@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle // NEO-TOKYO</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@300;700&display=swap');
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #0a0f0f;
+            font-family: 'Rajdhani', sans-serif;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Fondo con líneas de código matrix */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(0deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(circle at 50% 50%, black 40%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Efecto de escaneo */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, 
+                transparent 0%, 
+                rgba(0, 255, 255, 0.02) 10%,
+                transparent 20%);
+            animation: scan 8s linear infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(200%); }
+        }
+
+        /* Contenedor principal */
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 30px;
+        }
+
+        /* HUD Superior */
+        .hud-top {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            border: 1px solid #00ffff22;
+            background: #0f1a1a99;
+            backdrop-filter: blur(5px);
+            margin-bottom: 40px;
+            font-family: 'Orbitron', monospace;
+            color: #00ffff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 14px;
+            box-shadow: 0 0 20px #00ffff33;
+            clip-path: polygon(0 0, 100% 0, 98% 100%, 2% 100%);
+        }
+
+        .hud-item {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .hud-item span {
+            color: #ffffff;
+            font-weight: 300;
+        }
+
+        .pulse {
+            width: 8px;
+            height: 8px;
+            background: #00ffff;
+            border-radius: 0;
+            box-shadow: 0 0 10px #00ffff;
+            animation: pulse 1s infinite;
+        }
+
+        /* Título del artículo - Estilo cyberpunk */
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 4rem;
+            text-align: center;
+            color: transparent;
+            -webkit-text-stroke: 2px #00ffff;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            position: relative;
+            margin: 50px 0 30px;
+            filter: drop-shadow(0 0 20px #00ffff);
+            animation: glitch 3s infinite;
+        }
+
+        h1::before,
+        h1::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 4rem;
+            text-align: center;
+            color: #00ffff;
+            background: #0a0f0f;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+            transform: translateX(-2px);
+            opacity: 0.8;
+            animation: glitchBefore 2s infinite linear alternate-reverse;
+        }
+
+        h1::after {
+            clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+            transform: translateX(2px);
+            animation: glitchAfter 2s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitchBefore {
+            0% { transform: translateX(-2px); opacity: 0.8; }
+            100% { transform: translateX(2px); opacity: 0.6; }
+        }
+
+        @keyframes glitchAfter {
+            0% { transform: translateX(2px); opacity: 0.8; }
+            100% { transform: translateX(-2px); opacity: 0.6; }
+        }
+
+        /* Caja de contenido - Estilo terminal */
+        .content-box {
+            background: #0c1414;
+            border: 2px solid #00ffff;
+            padding: 40px;
+            margin: 40px 0 60px;
+            position: relative;
+            box-shadow: 
+                0 0 30px #00ffff33,
+                inset 0 0 30px #00ffff22;
+            clip-path: polygon(0% 0%, 100% 0%, 98% 100%, 2% 100%);
+        }
+
+        /* Esquinas decorativas */
+        .corner {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 2px solid #00ffff;
+            filter: drop-shadow(0 0 10px #00ffff);
+        }
+
+        .corner-tl {
+            top: 10px;
+            left: 10px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .corner-tr {
+            top: 10px;
+            right: 10px;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .corner-bl {
+            bottom: 10px;
+            left: 10px;
+            border-right: none;
+            border-top: none;
+        }
+
+        .corner-br {
+            bottom: 10px;
+            right: 10px;
+            border-left: none;
+            border-top: none;
+        }
+
+        /* Texto del contenido - Efecto terminal */
+        .content-text {
+            font-size: 1.6rem;
+            line-height: 1.8;
+            color: #c0ffff;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 300;
+            text-align: justify;
+            letter-spacing: 0.5px;
+            word-break: break-word;
+            border-left: 3px solid #00ffff;
+            padding-left: 25px;
+            margin: 20px 0;
+            text-shadow: 0 0 8px #00ffff99;
+            position: relative;
+        }
+
+        /* Línea de código animada */
+        .code-line {
+            font-family: 'Orbitron', monospace;
+            color: #00ffff;
+            font-size: 0.9rem;
+            margin: 10px 0;
+            opacity: 0.6;
+            letter-spacing: 2px;
+        }
+
+        .blink {
+            animation: blink 1s infinite;
+            background: #00ffff;
+            width: 10px;
+            height: 20px;
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Botón de volver - Cyberpunk */
+        .back-button {
+            display: inline-block;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: #00ffff;
+            text-decoration: none;
+            padding: 18px 45px;
+            background: transparent;
+            border: 2px solid #00ffff;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            transition: all 0.3s;
+            overflow: hidden;
+            clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+            box-shadow: 0 0 20px #00ffff33;
+            margin: 40px 0;
+        }
+
+        .back-button:hover {
+            background: #00ffff22;
+            box-shadow: 0 0 40px #00ffff;
+            transform: translateX(-50%) scale(1.05);
+            border-color: #ffffff;
+        }
+
+        .back-button::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, #00ffff33, transparent);
+            transition: left 0.5s;
+        }
+
+        .back-button:hover::before {
+            left: 100%;
+        }
+
+        /* Elementos flotantes - Tecnológicos */
+        .floating-tech {
+            position: fixed;
+            color: #00ffff;
+            font-family: 'Orbitron', monospace;
+            font-size: 12px;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            letter-spacing: -5px;
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: 1;
+            animation: float 20s linear infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes float {
+            from { transform: translateY(100vh); }
+            to { transform: translateY(-100vh); }
+        }
+
+        /* Barras de progreso decorativas */
+        .progress-bar {
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #00ffff, transparent);
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: -5px;
+            width: 10px;
+            height: 10px;
+            background: #00ffff;
+            box-shadow: 0 0 20px #00ffff;
+            animation: moveDot 3s infinite;
+        }
+
+        @keyframes moveDot {
+            0% { right: 0; opacity: 1; }
+            100% { right: 100%; opacity: 0; }
+        }
+
+        /* Mensaje de carga/error */
+        .no-content {
+            text-align: center;
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            color: #ff0033;
+            border: 2px solid #ff0033;
+            padding: 40px;
+            box-shadow: 0 0 30px #ff0033;
+            background: #1a0f0f;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Elementos flotantes tecnológicos -->
+    <div class="floating-tech" style="left: 5%; animation-duration: 15s;">010101010</div>
+    <div class="floating-tech" style="left: 15%; animation-duration: 12s;">100101100</div>
+    <div class="floating-tech" style="left: 85%; animation-duration: 18s;">011001101</div>
+    <div class="floating-tech" style="left: 95%; animation-duration: 14s;">110010010</div>
+
+    <div class="container">
+        <!-- HUD Superior -->
+        <div class="hud-top">
+            <div class="hud-item">
+                <div class="pulse"></div>
+                <span>SISTEMA ACTIVO</span>
+            </div>
+            <div class="hud-item">
+                <span>v.2.0.2.6</span>
+                <span>||</span>
+                <span>BASE DE DATOS</span>
+            </div>
+            <div class="hud-item">
+                <span>CPU: 98%</span>
+                <div class="pulse"></div>
+            </div>
+        </div>
+
+        <!-- Título con efecto glitch -->
+        <h1 data-text="{{ article.name }}">{{ article.name }}</h1>
+
+        <!-- Barra de progreso decorativa -->
+        <div class="progress-bar"></div>
+
+        <!-- Caja de contenido principal -->
+        <div class="content-box">
+            <div class="corner corner-tl"></div>
+            <div class="corner corner-tr"></div>
+            <div class="corner corner-bl"></div>
+            <div class="corner corner-br"></div>
+            
+            <!-- Línea de código -->
+            <div class="code-line">> INFORMACIÓN ALMACENADA: </div>
+            <div class="code-line">> DESPLEGANDO CONTENIDO </div>
+            
+            <!-- Contenido del artículo -->
+            <div class="content-text">{{ article.content }}</div>
+            
+            <!-- Línea de código final -->
+            <div class="code-line">> TRANSMISIÓN COMPLETADA <span class="blink"></span></div>
+            
+            <div style="margin: 30px 0; text-align: left;">
+            <a href="{% url 'article-edit' article.id %}" style="color: #00ffff; text-decoration: none; border: 1px solid #00ffff; padding: 5px 15px; font-size: 14px; letter-spacing: 1px; transition: all 0.3s; display: inline-block;" onmouseover="this.style.background='#00ffff22'; this.style.boxShadow='0 0 15px #00ffff'" onmouseout="this.style.background='transparent'; this.style.boxShadow='none'">[ EDITAR ]</a>
+            </div>
+
+        </div>
+
+        <!-- Botón de volver -->
+        <a href="/" class="back-button">[ VOLVER ]</a>
+
+        <!-- Footer HUD -->
+        <div class="hud-top" style="margin-top: 40px;">
+            <div class="hud-item">BASE DE DATOS: INFORMACIÓN ALMACENADA</div>
+            <div class="hud-item"> ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ </div>
+            <div class="hud-item">00:{{ article.content|length }}:{{ article.name|length }}</div>
+        </div>
+    </div>
+
+    <!-- Mensaje por si no hay artículo (comentado por si acaso) -->
+    <!-- <div class="no-content">ERROR 404 // ARTÍCULO NO ENCONTRADO</div> -->
+</body>
+</html>

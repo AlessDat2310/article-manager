@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Artículos // NEO-TOKYO</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@300;700&display=swap');
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #0a0f0f;
+            font-family: 'Rajdhani', sans-serif;
+            position: relative;
+            overflow-x: hidden;
+            padding: 40px 20px;
+        }
+
+        /* Fondo con líneas de código matrix */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(0deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(circle at 50% 50%, black 40%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Efecto de escaneo */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, 
+                transparent 0%, 
+                rgba(0, 255, 255, 0.02) 10%,
+                transparent 20%);
+            animation: scan 8s linear infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(200%); }
+        }
+
+        /* Contenedor principal */
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* HUD Superior */
+        .hud-top {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 30px;
+            border: 1px solid #00ffff22;
+            background: #0f1a1a99;
+            backdrop-filter: blur(5px);
+            margin-bottom: 40px;
+            font-family: 'Orbitron', monospace;
+            color: #00ffff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 14px;
+            box-shadow: 0 0 20px #00ffff33;
+            clip-path: polygon(0 0, 100% 0, 98% 100%, 2% 100%);
+        }
+
+        .hud-item {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .hud-item span {
+            color: #ffffff;
+            font-weight: 300;
+        }
+
+        .pulse {
+            width: 8px;
+            height: 8px;
+            background: #00ffff;
+            border-radius: 0;
+            box-shadow: 0 0 10px #00ffff;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Título principal con efecto glitch */
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 3.5rem;
+            text-align: center;
+            color: transparent;
+            -webkit-text-stroke: 2px #00ffff;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            position: relative;
+            margin: 30px 0 50px;
+            filter: drop-shadow(0 0 20px #00ffff);
+            animation: glitch 3s infinite;
+        }
+
+        h1::before,
+        h1::after {
+            content: "Mis Artículos";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 3.5rem;
+            text-align: center;
+            color: #00ffff;
+            background: #0a0f0f;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+            transform: translateX(-2px);
+            opacity: 0.8;
+            animation: glitchBefore 2s infinite linear alternate-reverse;
+        }
+
+        h1::after {
+            clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+            transform: translateX(2px);
+            animation: glitchAfter 2s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitchBefore {
+            0% { transform: translateX(-2px); opacity: 0.8; }
+            100% { transform: translateX(2px); opacity: 0.6; }
+        }
+
+        @keyframes glitchAfter {
+            0% { transform: translateX(2px); opacity: 0.8; }
+            100% { transform: translateX(-2px); opacity: 0.6; }
+        }
+
+        /* Barra de progreso decorativa */
+        .progress-bar {
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #00ffff, transparent);
+            margin: 20px 0 40px;
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: -5px;
+            width: 10px;
+            height: 10px;
+            background: #00ffff;
+            box-shadow: 0 0 20px #00ffff;
+            animation: moveDot 3s infinite;
+        }
+
+        @keyframes moveDot {
+            0% { right: 0; opacity: 1; }
+            100% { right: 100%; opacity: 0; }
+        }
+
+        /* Cards - Estilo cyberpunk */
+        .card {
+            background: #0c1414;
+            border: 2px solid #00ffff;
+            padding: 28px;
+            margin-bottom: 25px;
+            position: relative;
+            box-shadow: 
+                0 0 30px #00ffff33,
+                inset 0 0 30px #00ffff22;
+            clip-path: polygon(0% 0%, 100% 0%, 98% 100%, 2% 100%);
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+            cursor: pointer;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 
+                0 20px 30px rgba(0, 255, 255, 0.3),
+                0 0 50px #00ffff,
+                inset 0 0 30px #00ffff66;
+            border-color: #ffffff;
+            background: #102020;
+        }
+
+        /* Esquinas decorativas para cada card */
+        .corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #00ffff;
+            filter: drop-shadow(0 0 10px #00ffff);
+            transition: all 0.3s;
+        }
+
+        .card:hover .corner {
+            width: 25px;
+            height: 25px;
+            border-color: #ffffff;
+        }
+
+        .corner-tl {
+            top: 10px;
+            left: 10px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .corner-tr {
+            top: 10px;
+            right: 10px;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .corner-bl {
+            bottom: 10px;
+            left: 10px;
+            border-right: none;
+            border-top: none;
+        }
+
+        .corner-br {
+            bottom: 10px;
+            right: 10px;
+            border-left: none;
+            border-top: none;
+        }
+
+        /* Título del artículo (link) */
+        .title {
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .title a {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 26px;
+            color: #00ffff;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px #00ffff;
+            transition: all 0.3s;
+            border-bottom: 1px solid transparent;
+            padding-bottom: 5px;
+        }
+
+        .title a:hover {
+            color: #ffffff;
+            text-shadow: 0 0 20px #ffffff;
+            border-bottom-color: #00ffff;
+        }
+
+        /* Línea de código decorativa */
+        .code-line {
+            font-family: 'Orbitron', monospace;
+            color: #00ffff99;
+            font-size: 0.85rem;
+            margin: 10px 0 15px;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .blink {
+            width: 8px;
+            height: 15px;
+            background: #00ffff;
+            display: inline-block;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Texto de información secundaria */
+        .info-text {
+            color: #88aaff;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 18px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #00ffff33;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-text span {
+            color: #ffffff;
+            font-weight: 300;
+            text-transform: none;
+        }
+
+        /* Mensaje de lista vacía */
+        .empty-message {
+            text-align: center;
+            font-family: 'Orbitron', monospace;
+            font-size: 1.8rem;
+            color: #ff0033;
+            border: 2px solid #ff0033;
+            padding: 40px;
+            box-shadow: 0 0 30px #ff0033;
+            background: #1a0f0f;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            max-width: 600px;
+            margin: 40px auto;
+            clip-path: polygon(0% 0%, 100% 0%, 98% 100%, 2% 100%);
+        }
+
+        /* Elementos flotantes - Tecnológicos */
+        .floating-tech {
+            position: fixed;
+            color: #00ffff;
+            font-family: 'Orbitron', monospace;
+            font-size: 12px;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            letter-spacing: -5px;
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: 1;
+            animation: float 20s linear infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes float {
+            from { transform: translateY(100vh); }
+            to { transform: translateY(-100vh); }
+        }
+
+        /* Footer HUD */
+        .hud-bottom {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 30px;
+            border: 1px solid #00ffff22;
+            background: #0f1a1a99;
+            backdrop-filter: blur(5px);
+            margin-top: 40px;
+            font-family: 'Orbitron', monospace;
+            color: #00ffff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 14px;
+            box-shadow: 0 0 20px #00ffff33;
+            clip-path: polygon(0 0, 100% 0, 98% 100%, 2% 100%);
+        }
+
+        /* Contador de artículos */
+        .article-count {
+            display: inline-block;
+            background: transparent;
+            border: 1px solid #00ffff;
+            padding: 5px 15px;
+            margin-left: 15px;
+            font-size: 14px;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Elementos flotantes tecnológicos -->
+    <div class="floating-tech" style="left: 2%; animation-duration: 15s;">010101010</div>
+    <div class="floating-tech" style="left: 10%; animation-duration: 12s;">100101100</div>
+    <div class="floating-tech" style="left: 90%; animation-duration: 18s;">011001101</div>
+    <div class="floating-tech" style="left: 95%; animation-duration: 14s;">110010010</div>
+    <div class="floating-tech" style="left: 50%; animation-duration: 20s;">101010111</div>
+
+    <div class="container">
+        <!-- HUD Superior -->
+        <div class="hud-top">
+            <div class="hud-item">
+                <div class="pulse"></div>
+                <span>BASE DE DATOS</span>
+            </div>
+
+            <div class="hud-item">
+            <a href="{% url 'article-create' %}" style="color: #00ffff; text-decoration: none; border: 1px solid #00ffff; padding: 5px 15px; font-size: 12px; letter-spacing: 2px;">+ CREAR NUEVO</a>
+            </div>
+
+            <div class="hud-item">
+                <span>v.2.0.2.6</span>
+                <span>||</span>
+                <span>NEO-TOKYO</span>
+            </div>
+            <div class="hud-item">
+                <span>ARTÍCULOS: {{ articles|length }}</span>
+                <div class="pulse"></div>
+            </div>
+        </div>
+
+
+
+        <!-- Título con efecto glitch -->
+        <h1>Mis Artículos</h1>
+
+        <!-- Barra de progreso decorativa -->
+        <div class="progress-bar"></div>
+
+        <!-- Línea de código -->
+        <div class="code-line" style="margin-bottom: 30px; justify-content: center;">
+            > ESCANEO DE ARCHIVOS INICIADO <span class="blink"></span>
+        </div>
+
+        <!-- Lista de artículos -->
+        {% for article in articles %}
+
+        
+
+            <div class="card">
+            <div class="corner corner-tl"></div>
+            <div class="corner corner-tr"></div>
+            <div class="corner corner-bl"></div>
+            <div class="corner corner-br"></div>
+            
+            <!-- Línea de código con ID -->
+            <div class="code-line">
+                > ID_0x{{ article.id|default:"00" }}F{{ forloop.counter }}A7
+            </div>
+            
+            <!-- Título del artículo con link -->
+            <div class="title">
+                <a href="{% url 'article-detail' article.id %}">
+                    {{ article.name }}
+                </a>
+            </div>
+            
+            
+
+
+            <!-- Información secundaria -->
+            <div class="info-text">
+                <span>⏻</span> ESTADO: <span>ACTIVO</span>
+                <span style="margin-left: auto;">⚡ ACCESO: {{ forloop.counter }}/{{ articles|length }}</span>
+            </div>
+
+                        
+            <!-- Mensaje de click -->
+            <div style="font-family: 'Rajdhani'; color: #88aaff; margin-top: 15px; font-size: 16px; letter-spacing: 1px; border-left: 2px solid #00ffff; padding-left: 15px;">
+                >> Click para más información <<
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-message">
+            > NO HAY ARTÍCULOS DISPONIBLES <
+            <div style="font-size: 14px; margin-top: 20px; color: #ff6666;">ERROR 404 // ARCHIVOS NO ENCONTRADOS</div>
+        </div>
+        {% endfor %}
+
+        <!-- Footer HUD -->
+        <div class="hud-bottom">
+            <div class="hud-item">CYBERSPACE // SEGURO</div>
+            <div class="hud-item">
+                ⚡ ENCRIPTADO ⚡
+                <span class="article-count">{{ articles|length }} ITEMS</span>
+            </div>
+            <div class="hud-item">00:{{ articles|length }}:42</div>
+        </div>
+    </div>
+</body>
+</html>

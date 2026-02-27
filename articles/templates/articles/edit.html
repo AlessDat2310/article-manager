@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar artículo</title>
+</head>
+<body>
+
+    <h1>Editar artículo</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Actualizar</button>
+    </form>
+
+    <hr>
+
+    <form method="post" action="{% url 'article-delete' article.id %}">
+        {% csrf_token %}
+        <button type="submit" style="color: red;">
+            Eliminar artículo
+        </button>
+    </form>
+
+    <br>
+    <a href="{% url 'article-detail' article.id %}">
+        Volver al detalle
+    </a>
+
+</body>
+</html>
