@@ -6,40 +6,60 @@ Proyecto Django Completo
 Aplicación web desarrollada con Django que permite: Crear artículos, visualizar todos los artículos (y sus contenidos), editar artículos existentes, eliminar artículos y administración vía panel Django
 
 Este proyecto documenta paso a paso la creación de un entorno virtual, proyecto, aplicación y configuración de base de datos y habilitación de URLs.
-
 ---
-
 1. Creación de un entorno virtual
 
 El entorno virtual permite aislar las dependencias del proyecto.
 
+COMANDO:
+env\Scripts\activate
 ---
+2. Instalar Django
 
-2. Creación del proyecto en Django
+COMANDO:
+pip install django
+---
+3. Creación de un Proyecto en Django
+=> Crear proyecto
+COMANDO:
 
 django-admin startproject article_manager
-
-Y vinculación con la base de datos (en mi caso Sqlite)
-
-Realizar la migración
-
+Entrar al proyecto
+EN LA DIRECCIÓN:
+cd article_manager
 ---
+4. Ejecutar migraciones iniciales
+COMANDO: 
+python manage.py migrate
 
-3. Creación de la app y se guarda en Settings
+Base de datos habilitada
+Como django usa SQLite por defecto:
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+SQLite queda activada tras la migración.
+---
+5. Creación de una App en Django
+COMANDO:
+python manage.py startapp articles
+
+Registrar app en settings.py
 INSTALLED_APPS = [
     ...
     'articles',
 ]
-
 ---
-
-4. ESTRUCTURA DEL PROYECTO
-
+6. Estructura del Proyecto
 article_manager/
 │
 ├── manage.py
 ├── db.sqlite3
+├── requirements.txt
 │
 ├── article_manager/
 │   ├── settings.py
@@ -58,35 +78,84 @@ article_manager/
             ├── detail.html
             ├── new_article_form.html
             └── edit.html
-
+Archivos clave
+Archivo	Función
+models.py	Define las entidades
+views.py	Lógica del servidor
+urls.py	Rutas del sistema
+templates/	Renderizado HTML
+settings.py	Configuración global
 ---
+7. Probar modificaciones
+Cuando se modifica:
+python manage.py makemigrations
+python manage.py migrate
+Ejecutar servidor
+python manage.py runserver
 
-## Tecnologías utilizadas
-
-- Python 3.12
-- Django
-- SQLite3
-- HTML
-- CSS básico
-
+Abrir en navegador:
+http://localhost:8000/
 ---
-Referencias:
+8. URL que muestra todas las entidades
+**Modelo** (models.py)
+class Article(models.Model):
+    name = models.CharField(max_length=100)
+    content = models.TextField()
+**Vista** (views.py)
+def article_list(request):
+    articles = Article.objects.all()
+    return render(request, "articles/list.html", {"articles": articles})
+URL (articles/urls.py)
+path('', article_list, name='article-list'),
+**Template** (list.html)
+<h1>Lista de artículos</h1>
 
-Django Software Foundation. (2024). Django documentation.
-https://docs.djangoproject.com/en/stable/
+{% for article in articles %}
+  <h2>{{ article.name }}</h2>
+  <p>{{ article.content }}</p>
+{% endfor %}
 
-DeepSeek. (2026). Diseño de interfaz cyberpunk NEO-TOKYO 
-para aplicación Django [Código fuente HTML/CSS]. 
-Asistencia de IA en tiempo real. https://www.deepseek.com/
+Resultado:
+Una página que muestra todas las entidades almacenadas en la base de datos.
+---
+9. URL que genera una nueva entidad
+**Vista**
+def article_create(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        content = request.POST.get("content")
+        Article.objects.create(name=name, content=content)
+        return redirect("article-list")
+
+    return render(request, "articles/new_article_form.html")
+**URL**
+path('new/', article_create, name='article-create'),
+**Template**
+<form method="POST">
+  {% csrf_token %}
+  <input type="text" name="name" placeholder="Título">
+  <textarea name="content" placeholder="Contenido"></textarea>
+  <button type="submit">Guardar</button>
+</form>
+---
+10. RECURSOS
+Python 3.12
+Django
+SQLite3
+HTML
+CSS
+---
+11. Referencias
+
+Django Software Foundation. (2024). Django documentation. https://docs.djangoproject.com/en/stable/
+
+DeepSeek. (2026). Diseño de interfaz cyberpunk NEO-TOKYO para aplicación Django [Código fuente HTML/CSS]. Asistencia de IA en tiempo real. https://www.deepseek.com/
 
 OpenAI. (2026). ChatGPT (versión GPT-5) [Modelo de lenguaje]. https://chat.openai.com/
 
-Mondragón Guadarrama, J. C. (2026). Construcción de software y toma de decisiones 
-(Gpo 401) [Clase de licenciatura]. Tecnológico de Monterrey.
-
+Mondragón Guadarrama, J. C. (2026). Construcción de software y toma de decisiones (Gpo 401) [Clase de licenciatura]. Tecnológico de Monterrey.
 ---
-
 Autor
-Aless Dat2310
-Proyecto académico — 2026
 
+AlessDat2310
+Proyecto académico — 2026
